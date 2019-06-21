@@ -1,31 +1,31 @@
-import random
+from pick import pick
 
-class Cars:
-	def __init__(self, make):
-		self.make = make
-
-	def __del__(self):
-		print ('hello')
-
-	
-
-	def color(self):
-		colors = [
-			'red',
-			'yellow',
-			'black'
+class Calc:
+	def __init__(self, name):
+		self.name = name
+		self.actions = [
+			'Add',
+			'Subtract'
 		]
 
-		return random.choice(colors)
+		option, index = pick(self.actions, f"Hello {self.name}, what would you like to do?")
+		answer = None
 
+		a = int(input('Enter your first number: '))
+		b = int(input('Enter your second number: '))
 
-	def return_data(self):
-		return {
-			'color':self.color()
-		}
+		if index == 0:
+			answer = self.add(a, b)
 
+		if index == 1:
+			answer = self.subtract(a, b)
 
+		print (f'{self.name} your answer is {answer}')
 
-ford = Cars('Ford')
-data = ford.return_data()
-print (data)
+	def add(self, a, b):
+		return a + b
+
+	def subtract(self, a, b):
+		return a - b
+
+calc = Calc('John')

@@ -1,62 +1,87 @@
+from pick import pick
+
+MENU = [
+	{
+		'name':'Dark Roast',
+		'sizes':[
+			{
+				'name':'Tall',
+				'value':1.85
+			},
+			{
+				'name':'Grande',
+				'value':2.10
+			},
+			{
+				'name':'Venti',
+				'value':2.45
+			}
+		],
+		'flavors':[
+			{
+				'name':'Hazlenut',
+				'value':4.99
+			}
+		]
+	},
+	{
+		'name':'Blonde Roast',
+		'sizes':[
+			{
+				'name':'Tall',
+				'value':1.85
+			},
+			{
+				'name':'Grande',
+				'value':2.10
+			},
+			{
+				'name':'Venti',
+				'value':2.45
+			}
+		],
+		'flavors':[
+			{
+				'name':'Hazlenut',
+				'value':4.99
+			}
+		]
+	}
+]
 
 def welcome():
-	print("""Thank you for choosing python Starbucks.  What'll it be?\n
-	1. Dark Roast\n
-	2. Pike's Place\n
-	3. Blonde Roast\n
-	4. Caffe Latte\n
-	5. Cappuccino\n""")
-
-dark_roast = {
-"tall" : 1.85,
-"grande" : 2.10,
-"venti" : 2.45
-}
-
-blonde_roast = {
-"tall" : 1.85,
-"grande" : 2.10,
-"venti" : 2.45
-}
-
-caffe_latte = {
-"tall" : 2.95,
-"grande" : 3.65,
-"venti" : 4.15
-}
-
-cappuccino = {
-"tall" : 2.95,
-"grande" : 3.65,
-"venti" : 4.15
-}
+	print("""Thank you for choosing python Starbucks.  What'll it be?\n""")
 
 def beverage():
-	selection = input("Select your beverage (1 - 5) ")
+	def data(index):
+		menu_item = MENU[index]
+		sizes = menu_item['sizes']
 
-	if selection == "1":
-		selection2 = input("Dark Roast?  You got it.  Select size (T/G/V): ")
-		selection2 = selection2.lower()
-		if selection2 == "tall" or selection2 == "t":
-			print(dark_roast["tall"])
-			return dark_roast["tall"]
+		title = f"{menu_item['name']}  You got it.  Select size:"
+		options = []
+		for s in menu_item['sizes']:
+			options.append(s['name'])
 
-selection = input("Select your beverage (1 - 5) ")
+		option, index = pick(options, title)
+		value = sizes[index]['value']
 
-	if selection == "1":
-		selection2 = input("Dark Roast?  You got it.  Select size (T/G/V): ")
-		selection2 = selection2.lower()
-		if selection2 == "tall" or selection2 == "t":
-			print(dark_roast["tall"])
-			return dark_roast["tall"]
+		return value
 
-		
-	if selection == "2":
-		print("Pike is hot garbage.  Pick something else.")
-		order()
+	def ui():
+		title = f'Select your beverage (1 - {len(MENU)})'
+		options = []
+		for menu_item in MENU:
+			options.append(menu_item['name'])
+
+		option, index = pick(options, title)
+
+		value = data(index)
+
+		return value
+
+	return ui()
 
 order_total = 0
-
 
 welcome()
 order_total += beverage()
