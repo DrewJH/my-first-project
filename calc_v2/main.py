@@ -45,7 +45,7 @@ class Calc:
 			answer = self.floor_division(a, b)
 
 		print (f'{self.name}, your answer is {answer}')
-		more_calc(self.name)
+		self.more_calc()
 
 	def add(self, a, b):
 		return a + b
@@ -67,19 +67,24 @@ class Calc:
 
 	def floor_division(self, a ,b):
 		return a // b
+	
+	def more_calc(self):
+		self.more_calc = input(f"Is there another calculation you need {self.name}?\nEnter Y for YES\nEnter N for NO\n")
 
-	def more_calc(self, name):
-		self.name = name
+		if self.more_calc.upper() == "Y":
+			Calc(self.name)
 
-		more_calc = input(f"Is there another calculation you need {self.name}?\nEnter Y for YES\nEnter N for NO\n")
-
-		if more_calc.upper() == "Y":
-			__init__(self.name)
-
-		elif more_calc.upper() == "N":
+		elif self.more_calc.upper() == "N":
 			print("It's been real.")
 
 		else:
-			more_calc(self.name)
+			pass
 
 calc = Calc(welcome())
+
+#MyFlag = True
+#while MyFlag is True:
+    #calc = Calc(welcome())
+    #option, index = pick(['Yes', 'No'], 'Do another calc?')
+    #if index == 1:
+        #MyFlag = False
