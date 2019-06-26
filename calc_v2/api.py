@@ -8,10 +8,16 @@ class Calc:
 		self.a = None
 		self.b = None
 		self.answer = None
-		self.answers = []
+		self.operator = None
+		#self.answers = []
 		self.action_titles = [
 			'Add',
-			'Subtract'
+			'Subtract',
+			'Multiply',
+			'Divide',
+			'Modulus',
+			'Exponent',
+			'Floor Division'
 		]
 
 	def welcome(self):
@@ -22,7 +28,7 @@ class Calc:
 		self.select_action()
 		self.input_numbers()
 		self.perform_action()
-		self.add_answers()
+		#self.add_answers()
 		self.answer_message()
 		self.ask_repeat()
 		return 
@@ -37,26 +43,34 @@ class Calc:
 		return 
 
 	def perform_action(self):
-		if self.index == 0:
-			self.add()
+		self.operation_dict = {
+		0: self.add(), 
+		1: self.subtract(), 
+		2: self.multiply(), 
+		3: self.divide(), 
+		4: self.modulus(), 
+		5: self.exponent(), 
+		6: self.floor_divide() 
+		}
+		return self.operation_dict[self.index]
 
-		if self.index == 1:
-			self.subtract()
+		#if self.index == 1:
+			#self.subtract()
 
-	def add_answers(self):
-		self.answers.append(
-			{
-				'operation':self.option,
-				'num_a':self.a,
-				'num_b':self.b,
-				'answer':self.answer
-			}
-		)
-		return 
+	#def add_answers(self):
+		#self.answers.append(
+			#{
+				#'operation':self.option,
+				#'num_a':self.a,
+				#'num_b':self.b,
+				#'answer':self.answer
+			#}
+		#)
+		#return 
 
 	def answer_message(self):
-		print (f'{self.name}, your answer is {self.answer}')
-		print (self.answers)
+		print (f'{self.name}, {self.a} {self.operator} {self.b} = {self.answer}')
+		#print (self.answers)
 		return 
 
 	def ask_repeat(self):
@@ -65,12 +79,43 @@ class Calc:
 		if user_input.upper() == "Y":
 			self.init()
 		elif user_input.upper() == "N":
+			print("Bye for now.")
 			self.repeat = False
+		else:
+			print("Not a valid entry.")
+			self.ask_repeat()
 
 	def add(self):
 		self.answer = self.a + self.b
+		self.operator = "+"
 		return 
 
 	def subtract(self):
 		self.answer = self.a - self.b
+		self.operator = "-"
+		return 
+	
+	def multiply(self):
+		self.answer = self.a * self.b
+		self.operator = "*"
+		return 
+
+	def divide(self):
+		self.answer = self.a / self.b
+		self.operator = "/"
+		return 
+
+	def modulus(self):
+		self.answer = self.a % self.b
+		self.operator = "%"
+		return 
+
+	def exponent(self):
+		self.answer = self.a ** self.b
+		self.operator = "**"
+		return 
+
+	def floor_divide(self):
+		self.answer = self.a // self.b
+		self.operator = "//"
 		return 
