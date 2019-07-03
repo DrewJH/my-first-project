@@ -43,19 +43,26 @@ class Calc:
 		return 
 
 	def perform_action(self):
-		self.operation_dict = {
-		0: self.add(), 
-		1: self.subtract(), 
-		2: self.multiply(), 
-		3: self.divide(), 
-		4: self.modulus(), 
-		5: self.exponent(), 
-		6: self.floor_divide() 
-		}
-		return self.operation_dict[self.index]
+		if self.index == 0:
+			self.add()
 
-		#if self.index == 1:
-			#self.subtract()
+		if self.index == 1:
+			self.subtract()
+
+		if self.index == 2:
+			self.multiply()
+
+		if self.index == 3:
+			self.divide()
+
+		if self.index == 4:
+			self.modulus()
+
+		if self.index == 5:
+			self.exponent()
+
+		if self.index == 6:
+			self.floor_divide()
 
 	#def add_answers(self):
 		#self.answers.append(
