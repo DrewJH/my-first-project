@@ -1,6 +1,90 @@
+"""
+drinks
+---
+0 - brew
+1 - espresso
+2 - handcrafted
+"""
+
 #api means application programming interface you twit
 from pick import pick
 import menu
+
+SIZES = [
+	{
+		'id':0,
+		'name':'Tall'
+	},
+	{
+		'id':1,
+		'name':'Grande'
+	},
+	{
+		'id':2,
+		'name':'Venti'
+	}
+]
+
+SHOTS = [
+	{
+		'id':0,
+		'name':'Single'
+	},
+	{
+		'id':1,
+		'name':'Double'
+	},
+	{
+		'id':2,
+		'name':'Triple'
+	},
+	{
+		'id':3,
+		'name':'Quad'
+	}
+]
+
+PRICES = {
+	0:{
+		0:1.85,
+		1:2.10,
+		2:2.45
+	},
+	1:{
+		0:1.75,
+		1:1.95,
+		2:2.25,
+		3:2.65
+	},
+	2:{
+		0:2.95,
+		1:3.65,
+		2:4.15
+	}
+}
+
+DRINKS = [
+	{
+		'type':0,
+		'name':'Dark Roast'
+	},
+	{
+		'type':0,
+		'name':'Blonde Roast'
+	},
+	{
+		'type':1,
+		'name':'Espresso'
+	},
+	{
+		'type':2,
+		'name':'Caffe Latte'
+	},
+	{
+		'type':2,
+		'name':'Cappuccino'
+	}
+]
 
 class Drink:
 	def __init__(self):
@@ -51,12 +135,6 @@ class Drink:
 		self.name = input("Welcome to PythonBucks, please enter a name for your order: ")
 		return
 
-	def init(self):
-		self.select_drink()
-		self.select_size()
-		self.get_price()
-		return
-
 	def select_drink(self):
 		self.option, self.index = pick(self.drinks, f"Alright {self.name}, what'll it be?")
 		return
@@ -80,4 +158,10 @@ class Drink:
 			self.size = self.size_list[self.index2]
 			self.price = self.price_lc[self.index2]
 		print(f"{self.name}, your {self.size} {self.drink} will run you ${self.price}.")
+		return
+
+	def init(self):
+		self.select_drink()
+		self.select_size()
+		self.get_price()
 		return
