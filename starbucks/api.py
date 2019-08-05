@@ -4,11 +4,35 @@ drinks
 0 - brew
 1 - espresso
 2 - handcrafted
+3 - special
 """
 
 #api means application programming interface you twit
 from pick import pick
 import menu
+
+FLAVORS = [
+	{
+		'name':"No Added Flavor",
+		'price':0
+	},
+	{
+		'name':"Vanilla",
+		'price':.50
+	},
+	{
+		'name':"Caramel",
+		'price':.50
+	},
+	{
+		'name':"Hazelnut",
+		'price':.50
+	},
+	{
+		'name':"Cinnamon",
+		'price':.50
+	}
+]
 
 SIZES = [
 	{
@@ -60,6 +84,11 @@ PRICES = {
 		0:2.95,
 		1:3.65,
 		2:4.15
+	},
+	3:{
+		0:4.45,
+		1:4.95,
+		2:5.45
 	}
 }
 
@@ -83,29 +112,18 @@ DRINKS = [
 	{
 		'type':2,
 		'name':'Cappuccino'
-	}
+	},
+	{
+		'type':3,
+		'name':'Chunky Monkey'
+	}	
 ]
 
-DRINK_PICKER = [
-"Dark Roast",
-"Blonde Roast",
-"Espresso",
-"Caffe Latte",
-"Cappuccino"
-]
-
-SHOT_PICKER = [
-"Single",
-"Double",
-"Triple",
-"Quad"
-]
-
-SIZE_PICKER = [
-"Tall",
-"Grande",
-"Venti"
-]
+def list_generator(items, key):
+	my_list = []
+	for item in items:
+		my_list.append(item[key])
+	return my_list
 
 class Drink:
 	def __init__(self):
@@ -118,6 +136,12 @@ class Drink:
 		self.size_selection = None
 		self.shot_selection = None
 		self.size = None
+		self.size_id = None
+		self.flavor_menu = None
+		self.flavor_selection = None
+		self.flavor = None
+		self.flavor_id = None
+		self.flavor_price = None
 		self.price = None
 
 	def welcome(self):
@@ -125,6 +149,7 @@ class Drink:
 		return
 
 	def select_drink(self):
+		DRINK_PICKER = list_generator(DRINKS, 'name')
 		self.drink_menu, self.drink_selection = pick(DRINK_PICKER, f"Alright {self.name}, what'll it be?")
 		return
 
@@ -132,23 +157,51 @@ class Drink:
 		self.drink = DRINKS[self.drink_selection]['name']
 		self.type = DRINKS[self.drink_selection]['type']
 		if self.drink == "Espresso":
+			SHOT_PICKER = list_generator(SHOTS, 'name')
 			self.size_menu, self.size_selection = pick(SHOT_PICKER, "Espresso?  Excellent choice.  How many shots would you like?")
+			self.size_id = SHOTS[self.size_selection]['id']
 		else:
+			SIZE_PICKER = list_generator(SIZES, 'name')
 			self.size_menu, self.size_selection = pick(SIZE_PICKER, f"Okay, you'd like a {self.drink}.  What size would you like?")
+			self.size_id = SIZES[self.size_selection]['id']
+		return
+
+	def select_flavor(self):
+		if self.type == 2:
+			FLAVOR_PICKER = list_generator(FLAVORS, 'name')
+			self.flavor_menu, self.flavor_selection = pick(FLAVOR_PICKER, f"Would you like to add a flavor to your {self.drink}?")
+			self.flavor = FLAVORS[self.flavor_selection]['name']
+			self.flavor_price = FLAVORS[self.flavor_selection]['price']
+		else:
+			self.flavor_id = None
+			self.flavor_price = 0
 		return
 
 	def get_price(self):
-		if self.drink == "Espresso":
-			self.size = SHOTS[self.size_selection]['name']
-			self.price = PRICES[self.type][self.size_selection]
+		if self.type == 1:
+			self.size = SHOTS[self.size_id]['name']
+			self.price = PRICES[self.type][self.size_id]
+		elif self.type == 0 or 3:
+			self.size = SIZES[self.size_id]['name']
+			self.price = PRICES[self.type][self.size_id]
 		else:
-			self.size = SIZES[self.size_selection]['name']
-			self.price = PRICES[self.type][self.size_selection]
-		print(f"{self.name}, your {self.size} {self.drink} will run you ${self.price}.")
+			self.size = SIZES[self.size_id]['name']
+			self.price = self.flavor_price + PRICES[self.type][self.size_id]
+		return
+
+	def order_total(self):
+		if self.type == 2:
+			if self.flavor == "No Added Flavor":
+				self.flavor = ''
+			print(f"{self.name}, your {self.size} {self.flavor} {self.drink} will run you ${self.price}.")
+		else:			
+			print(f"{self.name}, your {self.size} {self.drink} will run you ${self.price}.")
 		return
 
 	def init(self):
 		self.select_drink()
 		self.select_size()
+		self.select_flavor()
 		self.get_price()
+		self.order_total()
 		return
