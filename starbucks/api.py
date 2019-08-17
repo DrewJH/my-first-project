@@ -141,8 +141,12 @@ class Drink:
 		self.flavor_selection = None
 		self.flavor = None
 		self.flavor_id = None
-		self.flavor_price = None
-		self.price = None
+		self.flavor_price = 0
+		self.price = 0
+		self.order_list = []
+		self.price_list = []
+		self.option = None
+		self.add_drinks = None
 
 	def welcome(self):
 		self.name = input("Welcome to PythonBucks, please enter a name for your order: ")
@@ -173,29 +177,39 @@ class Drink:
 			self.flavor = FLAVORS[self.flavor_selection]['name']
 			self.flavor_price = FLAVORS[self.flavor_selection]['price']
 		else:
-			self.flavor_id = None
-			self.flavor_price = 0
+			self.flavor = "No Added Flavor"
 		return
 
 	def get_price(self):
 		if self.type == 1:
 			self.size = SHOTS[self.size_id]['name']
-			self.price = PRICES[self.type][self.size_id]
-		elif self.type == 0 or 3:
-			self.size = SIZES[self.size_id]['name']
-			self.price = PRICES[self.type][self.size_id]
+			self.price = round(PRICES[self.type][self.size_id] * 1.075, 2) #sales tax
 		else:
 			self.size = SIZES[self.size_id]['name']
 			self.price = self.flavor_price + PRICES[self.type][self.size_id]
+			self.price = round(self.price * 1.075, 2)
+		return
+
+	def generate_order(self):
+		self.price_list.append(self.price)
+		if self.flavor == "No Added Flavor":
+			self.drink = f"{self.size} {self.drink}"
+		else:
+			self.drink = f"{self.size} {self.flavor} {self.drink}"
+		self.order_list.append(self.drink)
+		return
+
+	def more_drinks(self):
+		y_n = ["Yes", "No"]
+		self.option, self.add_drinks = pick(y_n, f"{self.name}, would you like another drink?")
+		if self.add_drinks == 0:
+			self.init()
+		else:
+			self.order_total()
 		return
 
 	def order_total(self):
-		if self.type == 2:
-			if self.flavor == "No Added Flavor":
-				self.flavor = ''
-			print(f"{self.name}, your {self.size} {self.flavor} {self.drink} will run you ${self.price}.")
-		else:			
-			print(f"{self.name}, your {self.size} {self.drink} will run you ${self.price}.")
+		print(f"{self.name}, your {self.order_list} will run you ${self.price_list}.")
 		return
 
 	def init(self):
@@ -203,5 +217,6 @@ class Drink:
 		self.select_size()
 		self.select_flavor()
 		self.get_price()
-		self.order_total()
+		self.generate_order()
+		self.more_drinks()
 		return
